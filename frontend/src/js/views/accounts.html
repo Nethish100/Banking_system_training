@@ -1,0 +1,111 @@
+<div class="oj-hybrid-padding">
+  
+  <!-- Page Header -->
+  <div class="oj-flex oj-sm-align-items-center oj-sm-margin-4x-bottom">
+    <div class="oj-flex-item">
+      <h1 class="oj-header-border">Account Management</h1>
+      <p class="oj-text-color-secondary">Manage customer accounts and balances</p>
+    </div>
+    <div class="oj-flex-item oj-sm-flex-initial">
+      <oj-button id="addAccountBtn" 
+                 chroming="callToAction" 
+                 on-oj-action="[[openAddDialog]]"
+                 disabled="[[isLoading()]]">
+        <span slot="startIcon" class="oj-ux-ico-add"></span>
+        Create Account
+      </oj-button>
+    </div>
+  </div>
+
+  <!-- Account Summary Cards -->
+  <div class="oj-flex oj-wrap oj-sm-margin-4x-bottom" data-bind="visible: !isLoading()">
+    <div class="oj-flex-item oj-sm-12 oj-md-4 oj-sm-padding-2x">
+      <div class="oj-panel oj-panel-alt1" style="text-align: center; padding: 20px;">
+        <div style="color: #4CAF50; font-size: 28px; font-weight: bold;">
+          [[accounts().length]]
+        </div>
+        <div style="color: #666; font-size: 14px;">Total Accounts</div>
+      </div>
+    </div>
+    <div class="oj-flex-item oj-sm-12 oj-md-4 oj-sm-padding-2x">
+      <div class="oj-panel oj-panel-alt1" style="text-align: center; padding: 20px;">
+        <div style="color: #FF9800; font-size: 24px; font-weight: bold;">
+          [[formatBalance(accounts().reduce((sum, acc) => sum + parseFloat(acc.accountBalance || 0), 0))]]
+        </div>
+        <div style="color: #666; font-size: 14px;">Total Balance</div>
+      </div>
+    </div>
+    <div class="oj-flex-item oj-sm-12 oj-md-4 oj-sm-padding-2x">
+      <div class="oj-panel oj-panel-alt1" style="text-align: center; padding: 20px;">
+        <div style="color: #2196F3; font-size: 28px; font-weight: bold;">
+          [[customers().length]]
+        </div>
+        <div style="color: #666; font-size: 14px;">Active Customers</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Loading Indicator -->
+  <div data-bind="visible: isLoading()" style="text-align: center; padding: 40px;">
+    <oj-progress-circle size="md"></oj-progress-circle>
+    <p style="margin-top: 15px; color: #666;">Loading accounts...</p>
+  </div>
+
+  <!-- Error Message -->
+  <oj-message-banner data-bind="visible: errorMessage().length > 0" 
+                    type="error" 
+                    summary="Error Loading Accounts"
+                    detail="[[errorMessage]]"
+                    style="margin-bottom: 20px;">
+  </oj-message-banner>
+
+  <!-- Accounts Table -->
+  <div data-bind="visible: !isLoading() && accounts().length > 0">
+    <oj-table id="accountsTable"
+              aria-label="Accounts Table"
+              data="[[accountsDataProvider]]"
+              columns="[[columnArray]]"
+              scroll-policy="loadMoreOnScroll"
+              class="oj-table-stretch"
+              style="width: 100%;">
+      
+      <!-- Account Type Template -->
+      <template slot="accountTypeTemplate" data-oj-as="cell">
+        <span class="account-type-badge" data-bind="css: cell.data.toLowerCase(), text: getAccountTypeLabel(cell.data)"></span>
+      </template>
+
+      <!-- Balance Template -->
+      <template slot="balanceTemplate" data-oj-as="cell">
+        <span class="balance-amount" data-bind="text: formatBalance(cell.data)"></span>
+      </template>
+
+      <!-- Customer Template -->
+      <template slot="customerTemplate" data-oj-as="cell">
+        <div class="customer-info">
+          <div class="customer-avatar" data-bind="text: getCustomerName(cell.row.customerId).charAt(0).toUpperCase()"></div>
+          <div>
+            <div style="font-weight: 500;" data-bind="text: getCustomerName(cell.row.customerId)"></div>
+            <div style="font-size: 12px; color: #666;" data-bind="text: 'ID: ' + cell.row.customerId"></div>
+          </div>
+        </div>
+      </template>
+
+      <!-- Action Template -->
+      <template slot="actionTemplate" data-oj-as="cell">
+        <div class="oj-flex oj-sm-flex-wrap oj-sm-justify-content-flex-end">
+          <oj-button chroming="danger" 
+                     size="sm" 
+                     on-oj-action="[[deleteAccount]]"
+                     title="Delete Account">
+            <span slot="startIcon" class="oj-ux-ico-delete"></span>
+            Delete
+          </oj-button>
+        </div>
+      </template>
+    </oj-table>
+  </div>
+
+  <!-- No Data Message -->
+  <div data-bind="visible: !isLoading() && accounts().length === 0" 
+       style="text-align: center; padding: 60px; background: white; border-radius: 8px;">
+    <span class="oj-ux

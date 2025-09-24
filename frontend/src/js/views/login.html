@@ -1,0 +1,88 @@
+<div class="oj-hybrid-padding">
+  <div class="oj-flex oj-sm-align-items-center oj-sm-justify-content-center" style="min-height: 80vh;">
+    <div class="oj-flex-item oj-sm-12 oj-md-8 oj-lg-6 oj-xl-4">
+      
+      <!-- Login Card -->
+      <div class="oj-panel oj-panel-alt1" style="padding: 40px; text-align: center;">
+        
+        <!-- Bank Logo -->
+        <div style="width: 80px; height: 80px; background: linear-gradient(135deg, #1565C0, #1976D2); 
+                    border-radius: 50%; margin: 0 auto 20px; display: flex; align-items: center; 
+                    justify-content: center; color: white; font-size: 32px; font-weight: bold;">
+          SB
+        </div>
+        
+        <!-- Title -->
+        <h1 class="oj-header-border" style="color: #1565C0; margin-bottom: 10px; font-weight: 300;">
+          SecureBank
+        </h1>
+        <p style="color: #666; margin-bottom: 30px; font-size: 14px;">
+          Administration Portal
+        </p>
+
+        <!-- Error Message -->
+        <oj-message-banner data-bind="visible: errorMessage().length > 0" 
+                          type="error" 
+                          summary="Login Failed"
+                          detail="[[errorMessage]]"
+                          style="margin-bottom: 20px;">
+        </oj-message-banner>
+
+        <!-- Login Form -->
+        <oj-form-layout>
+          <oj-input-text id="username" 
+                        label-hint="Username"
+                        value="{{username}}"
+                        placeholder="Enter your username"
+                        required>
+          </oj-input-text>
+
+          <oj-input-password id="password" 
+                            label-hint="Password"
+                            value="{{password}}"
+                            placeholder="Enter your password"
+                            required>
+          </oj-input-password>
+
+          <!-- Login Button -->
+          <div style="margin-top: 20px;">
+            <oj-button id="loginButton" 
+                      chroming="callToAction"
+                      on-oj-action="[[login]]"
+                      disabled="[[!isFormValid() || isLoading()]]"
+                      style="width: 100%;">
+              <span data-bind="visible: !isLoading()">Sign In</span>
+              <span data-bind="visible: isLoading()">Signing In...</span>
+            </oj-button>
+          </div>
+
+          <!-- Demo Credentials Button -->
+          <div style="margin-top: 15px;">
+            <oj-button id="demoButton" 
+                      chroming="outlined"
+                      on-oj-action="[[fillDemoCredentials]]"
+                      style="width: 100%;">
+              Use Demo Credentials
+            </oj-button>
+          </div>
+        </oj-form-layout>
+
+        <!-- Demo Info -->
+        <div style="margin-top: 30px; padding: 15px; background: #f5f5f5; border-radius: 8px;">
+          <p style="margin: 0; font-size: 12px; color: #666;">
+            <strong>Demo Credentials:</strong><br>
+            Username: admin<br>
+            Password: password
+          </p>
+        </div>
+
+        <!-- Footer -->
+        <div style="margin-top: 30px; padding-top: 20px; border-top: 1px solid #eee;">
+          <p style="margin: 0; font-size: 11px; color: #999;">
+            © 2024 SecureBank. All rights reserved.
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

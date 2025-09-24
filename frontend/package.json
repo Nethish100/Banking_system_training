@@ -1,0 +1,24 @@
+{
+  "name": "banking-admin-ojet",
+  "version": "1.0.0",
+  "description": "Banking Administration System with Oracle JET",
+  "main": "js/main.js",
+  "dependencies": {
+    "@oracle/oraclejet": "^14.1.0",
+    "requirejs": "^2.3.6",
+    "text": "^2.0.16",
+    "knockout": "^3.5.1",
+    "jquery": "^3.6.0"
+  },
+  "devDependencies": {
+    "@oracle/oraclejet-tooling": "^14.1.0"
+  },
+  "scripts": {
+    "serve": "ojet serve",
+    "build": "ojet build",
+    "clean": "ojet clean"
+  },
+  "engines": {
+    "node": ">=14.0.0"
+  }
+}

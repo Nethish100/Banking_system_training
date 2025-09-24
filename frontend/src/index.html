@@ -1,0 +1,1325 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <title>Banking System - Online Platform</title>
+    
+    <style>
+        :root {
+            --primary-blue: #1565C0;
+            --secondary-blue: #1976D2;
+            --accent-gold: #FFB300;
+            --success-green: #4CAF50;
+            --error-red: #F44336;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 0;
+            padding: 0;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+        }
+
+        /* Login Styles */
+        .login-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            background: linear-gradient(135deg, var(--primary-blue) 0%, var(--secondary-blue) 100%);
+        }
+
+        .login-card {
+            background: white;
+            padding: 40px;
+            border-radius: 15px;
+            box-shadow: 0 15px 35px rgba(0,0,0,0.1);
+            width: 100%;
+            max-width: 400px;
+            text-align: center;
+            animation: slideUp 0.6s ease-out;
+        }
+
+        .bank-logo {
+            width: 80px;
+            height: 80px;
+            background: var(--accent-gold);
+            border-radius: 50%;
+            margin: 0 auto 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 32px;
+            color: white;
+            font-weight: bold;
+        }
+
+        .login-title {
+            color: var(--primary-blue);
+            margin-bottom: 5px;
+            font-size: 28px;
+            font-weight: 300;
+        }
+
+        .login-subtitle {
+            color: var(--primary-blue);
+            margin-bottom: 10px;
+            font-size: 16px;
+            font-weight: 500;
+        }
+
+        .form-input {
+            width: 100%;
+            padding: 12px 15px;
+            margin: 10px 0;
+            border: 2px solid #E0E0E0;
+            border-radius: 8px;
+            font-size: 14px;
+            box-sizing: border-box;
+        }
+
+        .form-input:focus {
+            border-color: var(--primary-blue);
+            outline: none;
+        }
+
+        .btn-primary {
+            background: var(--primary-blue);
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-weight: 500;
+            width: 100%;
+            margin: 10px 0;
+            font-size: 16px;
+            transition: background 0.3s ease;
+        }
+
+        .btn-primary:hover {
+            background: #1976D2;
+        }
+
+        .btn-primary:disabled {
+            background: #ccc;
+            cursor: not-allowed;
+        }
+
+        .btn-secondary {
+            background: #E0E0E0;
+            color: #424242;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-weight: 500;
+            width: 100%;
+            margin: 10px 0;
+            transition: background 0.3s ease;
+        }
+
+        .btn-secondary:hover {
+            background: #BDBDBD;
+        }
+
+        .error-message {
+            color: var(--error-red);
+            margin: 10px 0;
+            padding: 10px;
+            background: #FFEBEE;
+            border-radius: 4px;
+            display: none;
+        }
+
+        /* Dashboard Styles */
+        .dashboard-container {
+            display: none;
+            background: #f8f9fa;
+            min-height: 100vh;
+        }
+
+        .header {
+            background: linear-gradient(135deg, var(--primary-blue), var(--secondary-blue));
+            color: white;
+            padding: 15px 30px;
+            box-shadow: 0 4px 16px rgba(0,0,0,0.15);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .nav-container {
+            background: var(--primary-blue);
+            padding: 0;
+        }
+
+        .nav-menu {
+            display: flex;
+            list-style: none;
+            margin: 0;
+            padding: 0;
+            flex-wrap: wrap;
+        }
+
+        .nav-item {
+            cursor: pointer;
+            padding: 15px 25px;
+            color: rgba(255,255,255,0.9);
+            transition: all 0.3s ease;
+            border-bottom: 3px solid transparent;
+            flex: 1;
+            text-align: center;
+            min-width: 120px;
+        }
+
+        .nav-item:hover, .nav-item.active {
+            background: rgba(255,255,255,0.1);
+            border-bottom-color: var(--accent-gold);
+            color: white;
+        }
+
+        .main-content {
+            padding: 30px;
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+
+        .stats-card {
+            background: white;
+            padding: 25px;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.08);
+            text-align: center;
+            transition: transform 0.3s ease;
+        }
+
+        .stats-card:hover {
+            transform: translateY(-5px);
+        }
+
+        .stats-number {
+            font-size: 32px;
+            font-weight: bold;
+            color: var(--primary-blue);
+            margin-bottom: 5px;
+        }
+
+        .stats-label {
+            color: #666;
+            font-size: 14px;
+        }
+
+        .content-card {
+            background: white;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.08);
+            margin-bottom: 20px;
+        }
+
+        .section-title {
+            color: var(--primary-blue);
+            margin-bottom: 20px;
+            font-size: 24px;
+            font-weight: 500;
+        }
+
+        .data-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+
+        .data-table th {
+            background: #f8f9fa;
+            padding: 12px;
+            text-align: left;
+            font-weight: 600;
+            border-bottom: 2px solid #dee2e6;
+        }
+
+        .data-table td {
+            padding: 12px;
+            border-bottom: 1px solid #dee2e6;
+        }
+
+        .data-table tr:hover {
+            background: #f8f9fa;
+        }
+
+        .btn-action {
+            padding: 6px 12px;
+            margin: 0 2px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 12px;
+            transition: all 0.3s ease;
+        }
+
+        .btn-edit {
+            background: var(--primary-blue);
+            color: white;
+        }
+
+        .btn-delete {
+            background: var(--error-red);
+            color: white;
+        }
+
+        .btn-view {
+            background: var(--success-green);
+            color: white;
+        }
+
+        .btn-action:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+        }
+
+        .account-type-badge {
+            padding: 4px 12px;
+            border-radius: 16px;
+            font-size: 11px;
+            font-weight: bold;
+            text-transform: uppercase;
+        }
+
+        .saving {
+            background: #E8F5E8;
+            color: #2E7D32;
+        }
+
+        .current {
+            background: #E3F2FD;
+            color: #1565C0;
+        }
+
+        .form-section {
+            background: #f8f9fa;
+            padding: 20px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+        }
+
+        .form-group {
+            margin-bottom: 15px;
+        }
+
+        .form-label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: 500;
+            color: #333;
+        }
+
+        .form-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+        }
+
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.5);
+            animation: fadeIn 0.3s ease;
+        }
+
+        .modal-content {
+            background: white;
+            margin: 5% auto;
+            padding: 0;
+            border-radius: 10px;
+            width: 90%;
+            max-width: 500px;
+            animation: slideDown 0.3s ease;
+        }
+
+        .modal-header {
+            background: linear-gradient(135deg, var(--primary-blue), var(--secondary-blue));
+            color: white;
+            padding: 20px;
+            border-radius: 10px 10px 0 0;
+        }
+
+        .modal-body {
+            padding: 20px;
+        }
+
+        .modal-footer {
+            padding: 15px 20px;
+            border-top: 1px solid #dee2e6;
+            display: flex;
+            justify-content: flex-end;
+            gap: 10px;
+        }
+
+        @keyframes slideUp {
+            from { transform: translateY(30px); opacity: 0; }
+            to { transform: translateY(0); opacity: 1; }
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        @keyframes slideDown {
+            from { transform: translateY(-30px); opacity: 0; }
+            to { transform: translateY(0); opacity: 1; }
+        }
+
+        @media (max-width: 768px) {
+            .nav-menu {
+                flex-direction: column;
+            }
+            
+            .nav-item {
+                flex: none;
+            }
+            
+            .main-content {
+                padding: 15px;
+            }
+            
+            .modal-content {
+                width: 95%;
+                margin: 10% auto;
+            }
+            
+            .form-row {
+                grid-template-columns: 1fr;
+            }
+            
+            .stats-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Login Page -->
+    <div id="loginPage" class="login-container">
+        <div class="login-card">
+            <div class="bank-logo">🏦</div>
+            <h1 class="login-title">Banking System</h1>
+            <h2 class="login-subtitle">Online Platform</h2>
+            <p style="color: #666; margin-bottom: 30px; font-size: 14px;">
+                Bank Administrators Portal<br>
+                <small>Maintain customer and account data</small>
+            </p>
+            
+            <div class="error-message" id="errorMessage"></div>
+            
+            <form id="loginForm">
+                <input type="text" id="username" class="form-input" placeholder="Enter Username" required>
+                <input type="password" id="password" class="form-input" placeholder="Enter Password" required>
+                <button type="submit" class="btn-primary" id="loginBtn">Login to System</button>
+                <button type="button" class="btn-secondary" onclick="fillDemo()">Use Demo Credentials</button>
+            </form>
+            
+            <div style="margin-top: 30px; padding: 15px; background: #f5f5f5; border-radius: 8px;">
+                <p style="margin: 0; font-size: 12px; color: #666;">
+                    <strong>Available Login Credentials:</strong><br>
+                    Username: <code>admin</code> | Password: <code>password</code><br>
+                    Username: <code>manager</code> | Password: <code>manager123</code>
+                </p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Dashboard Page -->
+    <div id="dashboardPage" class="dashboard-container">
+        <div class="header">
+            <div style="display: flex; align-items: center; gap: 10px;">
+                <span style="font-size: 28px;">🏦</span>
+                <div>
+                    <h1 style="margin: 0; font-weight: 300; font-size: 24px;">Banking System</h1>
+                    <p style="margin: 0; font-size: 14px; opacity: 0.9;">Online Platform for Bank Administrators</p>
+                </div>
+            </div>
+            <div style="display: flex; align-items: center; gap: 15px;">
+                <span id="welcomeUser">Welcome, Administrator</span>
+                <button class="btn-secondary" onclick="logout()" style="width: auto; margin: 0; background: rgba(255,255,255,0.2); color: white;">
+                    Logout
+                </button>
+            </div>
+        </div>
+
+        <div class="nav-container">
+            <ul class="nav-menu">
+                <li class="nav-item active" onclick="showSection('dashboard')">📊 Dashboard</li>
+                <li class="nav-item" onclick="showSection('customers')">👥 Customer Management</li>
+                <li class="nav-item" onclick="showSection('accounts')">💳 Account Management</li>
+            </ul>
+        </div>
+
+        <div class="main-content">
+            <!-- Dashboard Section -->
+            <div id="dashboardSection">
+                <div class="stats-grid">
+                    <div class="stats-card">
+                        <div class="stats-number" id="totalCustomers">Loading...</div>
+                        <div class="stats-label">Total Customers</div>
+                    </div>
+                    <div class="stats-card">
+                        <div class="stats-number" id="totalAccounts">Loading...</div>
+                        <div class="stats-label">Total Accounts</div>
+                    </div>
+                    <div class="stats-card">
+                        <div class="stats-number" id="totalBalance">Loading...</div>
+                        <div class="stats-label">Total Balance</div>
+                    </div>
+                    <div class="stats-card">
+                        <div class="stats-number">📈</div>
+                        <div class="stats-label">System Active</div>
+                    </div>
+                </div>
+                
+                <div class="content-card">
+                    <h3 class="section-title">Banking System Operations</h3>
+                    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 20px;">
+                        <div style="background: #f8f9fa; padding: 20px; border-radius: 8px;">
+                            <h4 style="color: var(--primary-blue); margin-bottom: 15px;">✅ Customer Operations</h4>
+                            <ul style="margin: 0; padding-left: 20px; line-height: 1.8;">
+                                <li><strong>ADD</strong> new Customer (ID auto-generated)</li>
+                                <li><strong>RETRIEVE</strong> Customer by ID</li>
+                                <li><strong>UPDATE</strong> Customer details (except ID)</li>
+                            </ul>
+                        </div>
+                        <div style="background: #f8f9fa; padding: 20px; border-radius: 8px;">
+                            <h4 style="color: var(--primary-blue); margin-bottom: 15px;">✅ Account Operations</h4>
+                            <ul style="margin: 0; padding-left: 20px; line-height: 1.8;">
+                                <li><strong>ADD</strong> new Account (Account No auto-generated)</li>
+                                <li><strong>RETRIEVE</strong> Account by Account No</li>
+                                <li><strong>DELETE</strong> Account by Account No</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Customer Management Section -->
+            <div id="customersSection" style="display: none;">
+                <div class="content-card">
+                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+                        <h2 class="section-title" style="margin: 0;">Customer Management</h2>
+                        <button class="btn-primary" onclick="openCustomerModal()" style="width: auto;">
+                            ➕ ADD New Customer
+                        </button>
+                    </div>
+                    
+                    <div style="background: #e3f2fd; padding: 15px; border-radius: 6px; margin-bottom: 20px;">
+                        <h4 style="margin: 0 0 10px 0; color: #1565c0;">Customer Data Fields:</h4>
+                        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 10px; font-size: 14px;">
+                            <div><strong>Customer ID:</strong> Auto-generated</div>
+                            <div><strong>Name:</strong> Customer full name</div>
+                            <div><strong>Email Address:</strong> Contact email</div>
+                            <div><strong>Registered Mobile Number:</strong> Phone contact</div>
+                            <div><strong>Address for Communication:</strong> Full address</div>
+                        </div>
+                    </div>
+
+                    <div id="customersTableContainer">
+                        <div id="customersLoading" style="text-align: center; padding: 40px;">
+                            Loading customers data...
+                        </div>
+                        <div id="customersError" style="text-align: center; padding: 40px; color: var(--error-red); display: none;">
+                        </div>
+                        <table class="data-table" id="customersTable" style="display: none;">
+                            <thead>
+                                <tr>
+                                    <th>Customer ID</th>
+                                    <th>Name</th>
+                                    <th>Email Address</th>
+                                    <th>Registered Mobile Number</th>
+                                    <th>Address for Communication</th>
+                                    <th>Operations</th>
+                                </tr>
+                            </thead>
+                            <tbody id="customersTableBody">
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Account Management Section -->
+            <div id="accountsSection" style="display: none;">
+                <div class="content-card">
+                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+                        <h2 class="section-title" style="margin: 0;">Account Management</h2>
+                        <button class="btn-primary" onclick="openAccountModal()" style="width: auto;">
+                            ➕ ADD New Account
+                        </button>
+                    </div>
+                    
+                    <div style="background: #e8f5e8; padding: 15px; border-radius: 6px; margin-bottom: 20px;">
+                        <h4 style="margin: 0 0 10px 0; color: #2e7d32;">Account Data Fields:</h4>
+                        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 10px; font-size: 14px;">
+                            <div><strong>Account No:</strong> Auto-generated</div>
+                            <div><strong>Account Holder Name:</strong> Name on account</div>
+                            <div><strong>Account Balance:</strong> Current balance amount</div>
+                            <div><strong>Type of Account:</strong> Saving, Current</div>
+                        </div>
+                    </div>
+
+                    <div id="accountsTableContainer">
+                        <div id="accountsLoading" style="text-align: center; padding: 40px;">
+                            Loading accounts data...
+                        </div>
+                        <div id="accountsError" style="text-align: center; padding: 40px; color: var(--error-red); display: none;">
+                        </div>
+                        <table class="data-table" id="accountsTable" style="display: none;">
+                            <thead>
+                                <tr>
+                                    <th>Account No</th>
+                                    <th>Account Holder Name</th>
+                                    <th>Account Balance</th>
+                                    <th>Type of Account</th>
+                                    <th>Customer ID</th>
+                                    <th>Operations</th>
+                                </tr>
+                            </thead>
+                            <tbody id="accountsTableBody">
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Customer Modal -->
+    <div id="customerModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 id="customerModalTitle">ADD New Customer</h3>
+            </div>
+            <div class="modal-body">
+                <form id="customerForm">
+                    <div class="form-group">
+                        <label class="form-label">Name *</label>
+                        <input type="text" id="customerName" class="form-input" placeholder="Enter customer full name" required>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Email Address *</label>
+                        <input type="email" id="customerEmail" class="form-input" placeholder="Enter email address" required>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Registered Mobile Number *</label>
+                        <input type="tel" id="customerMobile" class="form-input" placeholder="Enter mobile number" required>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Address for Communication *</label>
+                        <textarea id="customerAddress" class="form-input" rows="3" placeholder="Enter complete address" required></textarea>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button class="btn-secondary" onclick="closeCustomerModal()">Cancel</button>
+                <button class="btn-primary" id="saveCustomerBtn" onclick="saveCustomer()">Save Customer</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Account Modal -->
+    <div id="accountModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>ADD New Account</h3>
+            </div>
+            <div class="modal-body">
+                <form id="accountForm">
+                    <div class="form-group">
+                        <label class="form-label">Account Holder Name *</label>
+                        <input type="text" id="accountHolderName" class="form-input" placeholder="Enter account holder name" required>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Type of Account *</label>
+                        <select id="accountType" class="form-input" required>
+                            <option value="">Select account type</option>
+                            <option value="SAVING">Saving Account</option>
+                            <option value="CURRENT">Current Account</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Account Balance *</label>
+                        <input type="number" id="accountBalance" class="form-input" placeholder="Enter initial balance" min="0" step="0.01" required>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Select Customer *</label>
+                        <select id="accountCustomer" class="form-input" required>
+                            <option value="">Select customer</option>
+                        </select>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button class="btn-secondary" onclick="closeAccountModal()">Cancel</button>
+                <button class="btn-primary" onclick="saveAccount()">Save Account</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Detail View Modal -->
+    <div id="detailModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 id="detailModalTitle">Details</h3>
+            </div>
+            <div class="modal-body" id="detailModalBody">
+            </div>
+            <div class="modal-footer">
+                <button class="btn-primary" onclick="closeDetailModal()">Close</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- JavaScript -->
+    <script>
+        // API Base URL
+        const API_BASE = 'http://localhost:8080/api';
+        let editingCustomerId = null;
+
+        // Fill demo credentials
+        function fillDemo() {
+            document.getElementById('username').value = 'admin';
+            document.getElementById('password').value = 'password';
+        }
+
+        // Login functionality
+        document.getElementById('loginForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const username = document.getElementById('username').value;
+            const password = document.getElementById('password').value;
+            const loginBtn = document.getElementById('loginBtn');
+
+            if (!username || !password) {
+                showError('Please enter both username and password');
+                return;
+            }
+
+            loginBtn.textContent = 'Authenticating...';
+            loginBtn.disabled = true;
+
+            fetch(API_BASE + '/auth/login', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ username, password })
+            })
+            .then(response => {
+                if (!response.ok) throw new Error('Invalid credentials');
+                return response.json();
+            })
+            .then(data => {
+                localStorage.setItem('authToken', data.token);
+                localStorage.setItem('username', data.username);
+                
+                document.getElementById('loginPage').style.display = 'none';
+                document.getElementById('dashboardPage').style.display = 'block';
+                document.getElementById('welcomeUser').textContent = 'Welcome, ' + data.username;
+                
+                loadDashboardData();
+            })
+            .catch(error => {
+                showError('Authentication failed: ' + error.message);
+            })
+            .finally(() => {
+                loginBtn.textContent = 'Login to System';
+                loginBtn.disabled = false;
+            });
+        });
+
+        function showError(message) {
+            const errorMsg = document.getElementById('errorMessage');
+            errorMsg.textContent = message;
+            errorMsg.style.display = 'block';
+            setTimeout(() => errorMsg.style.display = 'none', 5000);
+        }
+
+        function loadDashboardData() {
+            const token = localStorage.getItem('authToken');
+            if (!token) return;
+
+            const headers = {
+                'Authorization': 'Bearer ' + token,
+                'Content-Type': 'application/json'
+            };
+
+            // Load customer count
+            fetch(API_BASE + '/customers/count', { headers })
+                .then(response => response.text())
+                .then(data => document.getElementById('totalCustomers').textContent = data)
+                .catch(error => {
+                    console.error('Error loading customer count:', error);
+                    document.getElementById('totalCustomers').textContent = 'Error';
+                });
+
+            // Load account count
+            fetch(API_BASE + '/accounts/count', { headers })
+                .then(response => response.text())
+                .then(data => document.getElementById('totalAccounts').textContent = data)
+                .catch(error => {
+                    console.error('Error loading account count:', error);
+                    document.getElementById('totalAccounts').textContent = 'Error';
+                });
+
+            // Load total balance
+            fetch(API_BASE + '/accounts/total-balance', { headers })
+                .then(response => response.text())
+                .then(data => {
+                    const balance = parseFloat(data);
+                    document.getElementById('totalBalance').textContent = '$' + balance.toLocaleString();
+                })
+                .catch(error => {
+                    console.error('Error loading total balance:', error);
+                    document.getElementById('totalBalance').textContent = 'Error';
+                });
+        }
+
+        function showSection(section) {
+            document.querySelectorAll('.nav-item').forEach(item => item.classList.remove('active'));
+            document.getElementById('dashboardSection').style.display = 'none';
+            document.getElementById('customersSection').style.display = 'none';
+            document.getElementById('accountsSection').style.display = 'none';
+            
+            if (section === 'dashboard') {
+                document.getElementById('dashboardSection').style.display = 'block';
+                document.querySelectorAll('.nav-item')[0].classList.add('active');
+                loadDashboardData();
+            } else if (section === 'customers') {
+                document.getElementById('customersSection').style.display = 'block';
+                document.querySelectorAll('.nav-item')[1].classList.add('active');
+                loadCustomers();
+            } else if (section === 'accounts') {
+                document.getElementById('accountsSection').style.display = 'block';
+                document.querySelectorAll('.nav-item')[2].classList.add('active');
+                loadAccounts();
+            }
+        }
+
+        // Customer Management Functions
+        function loadCustomers() {
+            const token = localStorage.getItem('authToken');
+            if (!token) return;
+
+            document.getElementById('customersLoading').style.display = 'block';
+            document.getElementById('customersError').style.display = 'none';
+            document.getElementById('customersTable').style.display = 'none';
+
+            fetch(API_BASE + '/customers', {
+                headers: {
+                    'Authorization': 'Bearer ' + token,
+                    'Content-Type': 'application/json'
+                }
+            })
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error(`HTTP ${response.status}: ${response.statusText}`);
+                }
+                return response.json();
+            })
+            .then(data => {
+                console.log('Customers loaded:', data);
+                // Ensure data is an array
+                const customers = Array.isArray(data) ? data : [];
+                displayCustomers(customers);
+            })
+            .catch(error => {
+                console.error('Error loading customers:', error);
+                document.getElementById('customersLoading').style.display = 'none';
+                document.getElementById('customersError').style.display = 'block';
+                document.getElementById('customersError').textContent = 'Error loading customers: ' + error.message;
+            });
+        }
+
+        function displayCustomers(customers) {
+            const tbody = document.getElementById('customersTableBody');
+            tbody.innerHTML = '';
+
+            if (!Array.isArray(customers)) {
+                console.error('Invalid customers data:', customers);
+                document.getElementById('customersError').style.display = 'block';
+                document.getElementById('customersError').textContent = 'Invalid data format received from server';
+                return;
+            }
+
+            customers.forEach(customer => {
+                const row = document.createElement('tr');
+                row.innerHTML = `
+                    <td><strong>${customer.customerId || 'N/A'}</strong></td>
+                    <td>${customer.name || 'N/A'}</td>
+                    <td>${customer.email || 'N/A'}</td>
+                    <td>${customer.mobileNumber || 'N/A'}</td>
+                    <td>${customer.address || 'N/A'}</td>
+                    <td>
+                        <button class="btn-action btn-view" onclick="viewCustomer(${customer.customerId})">VIEW</button>
+                        <button class="btn-action btn-edit" onclick="editCustomer(${customer.customerId})">UPDATE</button>
+                    </td>
+                `;
+                tbody.appendChild(row);
+            });
+
+            document.getElementById('customersLoading').style.display = 'none';
+            document.getElementById('customersTable').style.display = 'table';
+
+            if (customers.length === 0) {
+                const row = document.createElement('tr');
+                row.innerHTML = `<td colspan="6" style="text-align: center; padding: 40px; color: #666;">No customers found. Click "ADD New Customer" to get started.</td>`;
+                tbody.appendChild(row);
+            }
+        }
+
+        function openCustomerModal() {
+            editingCustomerId = null;
+            document.getElementById('customerModalTitle').textContent = 'ADD New Customer';
+            document.getElementById('saveCustomerBtn').textContent = 'Save Customer';
+            document.getElementById('customerForm').reset();
+            document.getElementById('customerModal').style.display = 'block';
+        }
+
+        function closeCustomerModal() {
+            document.getElementById('customerModal').style.display = 'none';
+        }
+
+        function viewCustomer(id) {
+            const token = localStorage.getItem('authToken');
+            fetch(API_BASE + '/customers/' + id, {
+                headers: { 'Authorization': 'Bearer ' + token }
+            })
+            .then(response => {
+                if (!response.ok) throw new Error('Customer not found');
+                return response.json();
+            })
+            .then(customer => {
+                document.getElementById('detailModalTitle').textContent = 'Customer Details';
+                document.getElementById('detailModalBody').innerHTML = `
+                    <div class="form-section">
+                        <h4>Customer Information</h4>
+                        <div class="form-row">
+                            <div><strong>Customer ID:</strong> ${customer.customerId}</div>
+                            <div><strong>Name:</strong> ${customer.name}</div>
+                        </div>
+                        <div class="form-row">
+                            <div><strong>Email Address:</strong> ${customer.email}</div>
+                            <div><strong>Registered Mobile:</strong> ${customer.mobileNumber}</div>
+                        </div>
+                        <div><strong>Address for Communication:</strong><br>${customer.address}</div>
+                        <div style="margin-top: 15px; padding: 10px; background: #f0f8ff; border-radius: 5px;">
+                            <small><strong>Created:</strong> ${new Date(customer.createdDate).toLocaleDateString()}</small>
+                        </div>
+                    </div>
+                `;
+                document.getElementById('detailModal').style.display = 'block';
+            })
+            .catch(error => alert('Error loading customer: ' + error.message));
+        }
+
+        function editCustomer(id) {
+            const token = localStorage.getItem('authToken');
+            fetch(API_BASE + '/customers/' + id, {
+                headers: { 'Authorization': 'Bearer ' + token }
+            })
+            .then(response => {
+                if (!response.ok) throw new Error('Customer not found');
+                return response.json();
+            })
+            .then(customer => {
+                editingCustomerId = id;
+                document.getElementById('customerModalTitle').textContent = 'UPDATE Customer Details';
+                document.getElementById('saveCustomerBtn').textContent = 'Update Customer';
+                document.getElementById('customerName').value = customer.name || '';
+                document.getElementById('customerEmail').value = customer.email || '';
+                document.getElementById('customerMobile').value = customer.mobileNumber || '';
+                document.getElementById('customerAddress').value = customer.address || '';
+                document.getElementById('customerModal').style.display = 'block';
+            })
+            .catch(error => alert('Error loading customer: ' + error.message));
+        }
+
+        function saveCustomer() {
+            const token = localStorage.getItem('authToken');
+            
+            // Get form values
+            const customerData = {
+                name: document.getElementById('customerName').value.trim(),
+                email: document.getElementById('customerEmail').value.trim(),
+                mobileNumber: document.getElementById('customerMobile').value.trim(),
+                address: document.getElementById('customerAddress').value.trim()
+            };
+
+            // Validate form
+            if (!customerData.name || !customerData.email || !customerData.mobileNumber || !customerData.address) {
+                alert('Please fill in all required fields');
+                return;
+            }
+
+            // Email validation
+            const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+            if (!emailRegex.test(customerData.email)) {
+                alert('Please enter a valid email address');
+                return;
+            }
+
+            const url = editingCustomerId ? 
+                API_BASE + '/customers/' + editingCustomerId : 
+                API_BASE + '/customers';
+            const method = editingCustomerId ? 'PUT' : 'POST';
+
+            // Disable save button
+            const saveBtn = document.getElementById('saveCustomerBtn');
+            const originalText = saveBtn.textContent;
+            saveBtn.textContent = 'Saving...';
+            saveBtn.disabled = true;
+
+            fetch(url, {
+                method: method,
+                headers: {
+                    'Authorization': 'Bearer ' + token,
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(customerData)
+            })
+            .then(response => {
+                if (!response.ok) {
+                    return response.text().then(text => {
+                        throw new Error(text || 'Save failed');
+                    });
+                }
+                return response.json();
+            })
+            .then(data => {
+                closeCustomerModal();
+                loadCustomers();
+                loadDashboardData(); // Refresh dashboard stats
+                alert(editingCustomerId ? 'Customer updated successfully!' : 'Customer added successfully!');
+            })
+            .catch(error => {
+                console.error('Error saving customer:', error);
+                alert('Error saving customer: ' + error.message);
+            })
+            .finally(() => {
+                saveBtn.textContent = originalText;
+                saveBtn.disabled = false;
+            });
+        }
+
+        // Account Management Functions
+        function loadAccounts() {
+            const token = localStorage.getItem('authToken');
+            if (!token) return;
+
+            document.getElementById('accountsLoading').style.display = 'block';
+            document.getElementById('accountsError').style.display = 'none';
+            document.getElementById('accountsTable').style.display = 'none';
+
+            fetch(API_BASE + '/accounts', {
+                headers: {
+                    'Authorization': 'Bearer ' + token,
+                    'Content-Type': 'application/json'
+                }
+            })
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error(`HTTP ${response.status}: ${response.statusText}`);
+                }
+                return response.json();
+            })
+            .then(data => {
+                console.log('Accounts loaded:', data);
+                // Ensure data is an array
+                const accounts = Array.isArray(data) ? data : [];
+                displayAccounts(accounts);
+            })
+            .catch(error => {
+                console.error('Error loading accounts:', error);
+                document.getElementById('accountsLoading').style.display = 'none';
+                document.getElementById('accountsError').style.display = 'block';
+                document.getElementById('accountsError').textContent = 'Error loading accounts: ' + error.message;
+            });
+        }
+
+        function displayAccounts(accounts) {
+            const tbody = document.getElementById('accountsTableBody');
+            tbody.innerHTML = '';
+
+            if (!Array.isArray(accounts)) {
+                console.error('Invalid accounts data:', accounts);
+                document.getElementById('accountsError').style.display = 'block';
+                document.getElementById('accountsError').textContent = 'Invalid data format received from server';
+                return;
+            }
+
+            accounts.forEach(account => {
+                const row = document.createElement('tr');
+                row.innerHTML = `
+                    <td><strong>${account.accountNo || 'N/A'}</strong></td>
+                    <td>${account.accountHolderName || 'N/A'}</td>
+                    <td style="text-align: right; font-weight: bold; color: #2e7d32;">
+                        ${parseFloat(account.accountBalance || 0).toLocaleString()}
+                    </td>
+                    <td><span class="account-type-badge ${(account.accountType || '').toLowerCase()}">${account.accountType || 'N/A'}</span></td>
+                    <td>${account.customerId || 'N/A'}</td>
+                    <td>
+                        <button class="btn-action btn-view" onclick="viewAccount('${account.accountNo}')">VIEW</button>
+                        <button class="btn-action btn-delete" onclick="deleteAccount('${account.accountNo}')">DELETE</button>
+                    </td>
+                `;
+                tbody.appendChild(row);
+            });
+
+            document.getElementById('accountsLoading').style.display = 'none';
+            document.getElementById('accountsTable').style.display = 'table';
+
+            if (accounts.length === 0) {
+                const row = document.createElement('tr');
+                row.innerHTML = `<td colspan="6" style="text-align: center; padding: 40px; color: #666;">No accounts found. Click "ADD New Account" to get started.</td>`;
+                tbody.appendChild(row);
+            }
+        }
+
+        function openAccountModal() {
+            document.getElementById('accountForm').reset();
+            loadCustomerOptions();
+            document.getElementById('accountModal').style.display = 'block';
+        }
+
+        function closeAccountModal() {
+            document.getElementById('accountModal').style.display = 'none';
+        }
+
+        function loadCustomerOptions() {
+            const token = localStorage.getItem('authToken');
+            const select = document.getElementById('accountCustomer');
+            
+            // Clear existing options
+            select.innerHTML = '<option value="">Loading customers...</option>';
+            
+            fetch(API_BASE + '/customers', {
+                headers: { 'Authorization': 'Bearer ' + token }
+            })
+            .then(response => {
+                if (!response.ok) throw new Error('Failed to load customers');
+                return response.json();
+            })
+            .then(customers => {
+                select.innerHTML = '<option value="">Select customer</option>';
+                
+                if (Array.isArray(customers)) {
+                    customers.forEach(customer => {
+                        const option = document.createElement('option');
+                        option.value = customer.customerId;
+                        option.textContent = `${customer.name} (ID: ${customer.customerId})`;
+                        select.appendChild(option);
+                    });
+                } else {
+                    select.innerHTML = '<option value="">No customers available</option>';
+                }
+            })
+            .catch(error => {
+                console.error('Error loading customers for account:', error);
+                select.innerHTML = '<option value="">Error loading customers</option>';
+                alert('Error loading customers: ' + error.message);
+            });
+        }
+
+        function viewAccount(accountNo) {
+            const token = localStorage.getItem('authToken');
+            fetch(API_BASE + '/accounts/' + accountNo, {
+                headers: { 'Authorization': 'Bearer ' + token }
+            })
+            .then(response => {
+                if (!response.ok) throw new Error('Account not found');
+                return response.json();
+            })
+            .then(account => {
+                document.getElementById('detailModalTitle').textContent = 'Account Details';
+                document.getElementById('detailModalBody').innerHTML = `
+                    <div class="form-section">
+                        <h4>Account Information</h4>
+                        <div class="form-row">
+                            <div><strong>Account No:</strong> ${account.accountNo}</div>
+                            <div><strong>Account Holder Name:</strong> ${account.accountHolderName}</div>
+                        </div>
+                        <div class="form-row">
+                            <div><strong>Account Balance:</strong> ${parseFloat(account.accountBalance).toLocaleString()}</div>
+                            <div><strong>Type of Account:</strong> <span class="account-type-badge ${account.accountType.toLowerCase()}">${account.accountType}</span></div>
+                        </div>
+                        <div><strong>Customer ID:</strong> ${account.customerId}</div>
+                        <div style="margin-top: 15px; padding: 10px; background: #f0f8ff; border-radius: 5px;">
+                            <small><strong>Created:</strong> ${new Date(account.createdDate).toLocaleDateString()}</small>
+                        </div>
+                    </div>
+                `;
+                document.getElementById('detailModal').style.display = 'block';
+            })
+            .catch(error => alert('Error loading account: ' + error.message));
+        }
+
+        function saveAccount() {
+            const token = localStorage.getItem('authToken');
+            
+            // Get form values
+            const accountData = {
+                accountHolderName: document.getElementById('accountHolderName').value.trim(),
+                accountType: document.getElementById('accountType').value,
+                accountBalance: parseFloat(document.getElementById('accountBalance').value) || 0,
+                customerId: parseInt(document.getElementById('accountCustomer').value)
+            };
+
+            // Validate form
+            if (!accountData.accountHolderName || !accountData.accountType || !accountData.customerId) {
+                alert('Please fill in all required fields');
+                return;
+            }
+
+            if (accountData.accountBalance < 0) {
+                alert('Account balance cannot be negative');
+                return;
+            }
+
+            // Disable save button
+            const saveBtn = document.querySelector('#accountModal .btn-primary');
+            const originalText = saveBtn.textContent;
+            saveBtn.textContent = 'Saving...';
+            saveBtn.disabled = true;
+
+            fetch(API_BASE + '/accounts', {
+                method: 'POST',
+                headers: {
+                    'Authorization': 'Bearer ' + token,
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(accountData)
+            })
+            .then(response => {
+                if (!response.ok) {
+                    return response.text().then(text => {
+                        throw new Error(text || 'Save failed');
+                    });
+                }
+                return response.json();
+            })
+            .then(data => {
+                closeAccountModal();
+                loadAccounts();
+                loadDashboardData(); // Refresh dashboard stats
+                alert('Account created successfully! Account No: ' + data.accountNo);
+            })
+            .catch(error => {
+                console.error('Error creating account:', error);
+                alert('Error creating account: ' + error.message);
+            })
+            .finally(() => {
+                saveBtn.textContent = originalText;
+                saveBtn.disabled = false;
+            });
+        }
+
+        function deleteAccount(accountNo) {
+            if (!confirm('Are you sure you want to DELETE account ' + accountNo + '?\n\nThis operation cannot be undone.')) {
+                return;
+            }
+
+            const token = localStorage.getItem('authToken');
+            fetch(API_BASE + '/accounts/' + accountNo, {
+                method: 'DELETE',
+                headers: { 'Authorization': 'Bearer ' + token }
+            })
+            .then(response => {
+                if (!response.ok) throw new Error('Delete failed');
+                loadAccounts();
+                loadDashboardData(); // Refresh dashboard stats
+                alert('Account ' + accountNo + ' deleted successfully!');
+            })
+            .catch(error => alert('Error deleting account: ' + error.message));
+        }
+
+        function closeDetailModal() {
+            document.getElementById('detailModal').style.display = 'none';
+        }
+
+        function logout() {
+            localStorage.removeItem('authToken');
+            localStorage.removeItem('username');
+            document.getElementById('loginPage').style.display = 'flex';
+            document.getElementById('dashboardPage').style.display = 'none';
+            document.getElementById('username').value = '';
+            document.getElementById('password').value = '';
+        }
+
+        // Auto-login check
+        window.onload = function() {
+            const token = localStorage.getItem('authToken');
+            if (token) {
+                document.getElementById('loginPage').style.display = 'none';
+                document.getElementById('dashboardPage').style.display = 'block';
+                document.getElementById('welcomeUser').textContent = 'Welcome, ' + localStorage.getItem('username');
+                loadDashboardData();
+            }
+        };
+
+        // Close modals when clicking outside
+        window.onclick = function(event) {
+            const modals = ['customerModal', 'accountModal', 'detailModal'];
+            modals.forEach(modalId => {
+                const modal = document.getElementById(modalId);
+                if (event.target === modal) {
+                    modal.style.display = 'none';
+                }
+            });
+        };
+
+        // Handle form submissions
+        document.getElementById('customerForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            saveCustomer();
+        });
+
+        document.getElementById('accountForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            saveAccount();
+        });
+
+        // Auto-fill account holder name when customer is selected
+        document.getElementById('accountCustomer').addEventListener('change', function() {
+            const select = this;
+            const selectedText = select.options[select.selectedIndex].text;
+            if (selectedText.includes('(ID:')) {
+                const customerName = selectedText.split(' (ID:')[0];
+                document.getElementById('accountHolderName').value = customerName;
+            }
+        });
+
+        // Handle ESC key to close modals
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'Escape') {
+                document.getElementById('customerModal').style.display = 'none';
+                document.getElementById('accountModal').style.display = 'none';
+                document.getElementById('detailModal').style.display = 'none';
+            }
+        });
+
+        console.log('🏦 Banking System - Complete & Fixed Implementation Ready!');
+        console.log('✅ Issues Fixed: forEach error, Submit buttons, Customer dropdown');
+        console.log('🔐 Login: admin/password or manager/manager123');
+        console.log('📊 All CRUD operations working with proper error handling');
+    </script>
+</body>
+</html>

@@ -1,0 +1,197 @@
+<div class="oj-hybrid-padding">
+  
+  <!-- Page Header -->
+  <div class="oj-flex oj-sm-align-items-center oj-sm-margin-4x-bottom">
+    <div class="oj-flex-item">
+      <h1 class="oj-header-border">Dashboard</h1>
+      <p class="oj-text-color-secondary">Overview of your banking administration system</p>
+    </div>
+    <div class="oj-flex-item oj-sm-flex-initial">
+      <oj-button id="refreshBtn" 
+                chroming="outlined" 
+                on-oj-action="[[refreshDashboard]]"
+                disabled="[[isLoading()]]">
+        <span slot="startIcon" class="oj-ux-ico-refresh"></span>
+        Refresh
+      </oj-button>
+    </div>
+  </div>
+
+  <!-- Loading Indicator -->
+  <div data-bind="visible: isLoading()" style="text-align: center; padding: 40px;">
+    <oj-progress-circle size="md"></oj-progress-circle>
+    <p style="margin-top: 15px; color: #666;">Loading dashboard data...</p>
+  </div>
+
+  <!-- Error Message -->
+  <oj-message-banner data-bind="visible: errorMessage().length > 0" 
+                    type="error" 
+                    summary="Error Loading Dashboard"
+                    detail="[[errorMessage]]"
+                    style="margin-bottom: 20px;">
+  </oj-message-banner>
+
+  <!-- Statistics Cards -->
+  <div class="oj-flex oj-wrap oj-sm-margin-4x-bottom" data-bind="visible: !isLoading()">
+    
+    <!-- Total Customers Card -->
+    <div class="oj-flex-item oj-sm-12 oj-md-6 oj-lg-3 oj-sm-padding-2x">
+      <div class="oj-panel oj-panel-alt1 dashboard-stat-card" 
+           style="padding: 25px; border-left: 4px solid #1565C0; cursor: pointer;"
+           data-bind="click: goToCustomers">
+        <div class="oj-flex oj-sm-align-items-center">
+          <div class="oj-flex-item oj-sm-flex-initial">
+            <div class="stat-icon" style="width: 50px; height: 50px; background: linear-gradient(135deg, #1565C0, #1976D2); 
+                                         border-radius: 10px; display: flex; align-items: center; justify-content: center;">
+              <span class="oj-ux-ico-contact-group" style="color: white; font-size: 24px;"></span>
+            </div>
+          </div>
+          <div class="oj-flex-item oj-sm-margin-2x-start">
+            <div class="stat-number" style="font-size: 32px; font-weight: bold; color: #1565C0;">
+              [[totalCustomers()]]
+            </div>
+            <div class="stat-label" style="color: #666; font-size: 14px;">
+              Total Customers
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Total Accounts Card -->
+    <div class="oj-flex-item oj-sm-12 oj-md-6 oj-lg-3 oj-sm-padding-2x">
+      <div class="oj-panel oj-panel-alt1 dashboard-stat-card" 
+           style="padding: 25px; border-left: 4px solid #4CAF50; cursor: pointer;"
+           data-bind="click: goToAccounts">
+        <div class="oj-flex oj-sm-align-items-center">
+          <div class="oj-flex-item oj-sm-flex-initial">
+            <div class="stat-icon" style="width: 50px; height: 50px; background: linear-gradient(135deg, #4CAF50, #66BB6A); 
+                                         border-radius: 10px; display: flex; align-items: center; justify-content: center;">
+              <span class="oj-ux-ico-credit-card" style="color: white; font-size: 24px;"></span>
+            </div>
+          </div>
+          <div class="oj-flex-item oj-sm-margin-2x-start">
+            <div class="stat-number" style="font-size: 32px; font-weight: bold; color: #4CAF50;">
+              [[totalAccounts()]]
+            </div>
+            <div class="stat-label" style="color: #666; font-size: 14px;">
+              Active Accounts
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Total Balance Card -->
+    <div class="oj-flex-item oj-sm-12 oj-md-6 oj-lg-3 oj-sm-padding-2x">
+      <div class="oj-panel oj-panel-alt1 dashboard-stat-card" 
+           style="padding: 25px; border-left: 4px solid #FF9800;">
+        <div class="oj-flex oj-sm-align-items-center">
+          <div class="oj-flex-item oj-sm-flex-initial">
+            <div class="stat-icon" style="width: 50px; height: 50px; background: linear-gradient(135deg, #FF9800, #FFB74D); 
+                                         border-radius: 10px; display: flex; align-items: center; justify-content: center;">
+              <span class="oj-ux-ico-dollar" style="color: white; font-size: 24px;"></span>
+            </div>
+          </div>
+          <div class="oj-flex-item oj-sm-margin-2x-start">
+            <div class="stat-number" style="font-size: 28px; font-weight: bold; color: #FF9800;">
+              [[formattedTotalBalance()]]
+            </div>
+            <div class="stat-label" style="color: #666; font-size: 14px;">
+              Total Balance
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Growth Card -->
+    <div class="oj-flex-item oj-sm-12 oj-md-6 oj-lg-3 oj-sm-padding-2x">
+      <div class="oj-panel oj-panel-alt1 dashboard-stat-card" 
+           style="padding: 25px; border-left: 4px solid #9C27B0;">
+        <div class="oj-flex oj-sm-align-items-center">
+          <div class="oj-flex-item oj-sm-flex-initial">
+            <div class="stat-icon" style="width: 50px; height: 50px; background: linear-gradient(135deg, #9C27B0, #BA68C8); 
+                                         border-radius: 10px; display: flex; align-items: center; justify-content: center;">
+              <span class="oj-ux-ico-bar-chart" style="color: white; font-size: 24px;"></span>
+            </div>
+          </div>
+          <div class="oj-flex-item oj-sm-margin-2x-start">
+            <div class="stat-number" style="font-size: 32px; font-weight: bold; color: #9C27B0;">
+              [[formattedGrowth()]]
+            </div>
+            <div class="stat-label" style="color: #666; font-size: 14px;">
+              Growth This Month
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Recent Activities Section -->
+  <div class="oj-panel oj-panel-alt1" data-bind="visible: !isLoading()" style="margin-top: 20px;">
+    <h3 class="oj-header-border" style="color: #1565C0; margin-bottom: 20px;">
+      <span class="oj-ux-ico-recent-items" style="margin-right: 8px;"></span>
+      Recent Activity
+    </h3>
+    
+    <!-- Activities List -->
+    <div data-bind="if: recentActivities().length > 0">
+      <div data-bind="foreach: recentActivities">
+        <div class="oj-flex oj-sm-align-items-center oj-sm-padding-2x" 
+             style="border-bottom: 1px solid #eee; transition: background-color 0.3s;">
+          <div class="oj-flex-item oj-sm-flex-initial">
+            <div style="width: 40px; height: 40px; background: #f5f5f5; border-radius: 50%; 
+                       display: flex; align-items: center; justify-content: center;">
+              <span data-bind="css: iconClass" style="color: #1565C0; font-size: 18px;"></span>
+            </div>
+          </div>
+          <div class="oj-flex-item oj-sm-margin-2x-start">
+            <div style="font-weight: 500; color: #333; margin-bottom: 4px;">
+              <span data-bind="text: description"></span>
+            </div>
+            <div style="font-size: 12px; color: #999;">
+              <span data-bind="text: $parent.formatTimestamp(timestamp)"></span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    
+    <!-- No Activities Message -->
+    <div data-bind="if: recentActivities().length === 0" 
+         style="text-align: center; padding: 40px; color: #666;">
+      <span class="oj-ux-ico-info-s" style="font-size: 48px; color: #ccc; display: block; margin-bottom: 15px;"></span>
+      <p>Welcome to the Banking Administration System!</p>
+      <p>Start by managing customers and accounts to see recent activities here.</p>
+      <div style="margin-top: 20px;">
+        <oj-button chroming="outlined" on-oj-action="[[goToCustomers]]" style="margin-right: 10px;">
+          Manage Customers
+        </oj-button>
+        <oj-button chroming="outlined" on-oj-action="[[goToAccounts]]">
+          Manage Accounts
+        </oj-button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<style>
+  .dashboard-stat-card {
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+  }
+  
+  .dashboard-stat-card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 25px rgba(0,0,0,0.15);
+  }
+  
+  .stat-icon {
+    transition: transform 0.3s ease;
+  }
+  
+  .dashboard-stat-card:hover .stat-icon {
+    transform: scale(1.1);
+  }
+</style>

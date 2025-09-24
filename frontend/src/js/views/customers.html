@@ -1,0 +1,219 @@
+<div class="oj-hybrid-padding">
+  
+  <!-- Page Header -->
+  <div class="oj-flex oj-sm-align-items-center oj-sm-margin-4x-bottom">
+    <div class="oj-flex-item">
+      <h1 class="oj-header-border">Customer Management</h1>
+      <p class="oj-text-color-secondary">Manage customer information and profiles</p>
+    </div>
+    <div class="oj-flex-item oj-sm-flex-initial">
+      <oj-button id="addCustomerBtn" 
+                 chroming="callToAction" 
+                 on-oj-action="[[openAddDialog]]"
+                 disabled="[[isLoading()]]">
+        <span slot="startIcon" class="oj-ux-ico-add"></span>
+        Add Customer
+      </oj-button>
+    </div>
+  </div>
+
+  <!-- Loading Indicator -->
+  <div data-bind="visible: isLoading()" style="text-align: center; padding: 40px;">
+    <oj-progress-circle size="md"></oj-progress-circle>
+    <p style="margin-top: 15px; color: #666;">Loading customers...</p>
+  </div>
+
+  <!-- Error Message -->
+  <oj-message-banner data-bind="visible: errorMessage().length > 0" 
+                    type="error" 
+                    summary="Error Loading Customers"
+                    detail="[[errorMessage]]"
+                    style="margin-bottom: 20px;">
+  </oj-message-banner>
+
+  <!-- Customers Table -->
+  <div data-bind="visible: !isLoading() && customers().length > 0">
+    <oj-table id="customersTable"
+              aria-label="Customers Table"
+              data="[[customersDataProvider]]"
+              columns="[[columnArray]]"
+              scroll-policy="loadMoreOnScroll"
+              class="oj-table-stretch"
+              style="width: 100%;">
+      
+      <!-- Action Template -->
+      <template slot="actionTemplate" data-oj-as="cell">
+        <div class="oj-flex oj-sm-flex-wrap oj-sm-justify-content-flex-end">
+          <oj-button chroming="outlined" 
+                     size="sm" 
+                     class="oj-sm-margin-1x-end"
+                     on-oj-action="[[editCustomer]]"
+                     style="margin-right: 8px;">
+            <span slot="startIcon" class="oj-ux-ico-edit"></span>
+            Edit
+          </oj-button>
+          <oj-button chroming="danger" 
+                     size="sm" 
+                     on-oj-action="[[deleteCustomer]]">
+            <span slot="startIcon" class="oj-ux-ico-delete"></span>
+            Delete
+          </oj-button>
+        </div>
+      </template>
+    </oj-table>
+  </div>
+
+  <!-- No Data Message -->
+  <div data-bind="visible: !isLoading() && customers().length === 0" 
+       style="text-align: center; padding: 60px; background: white; border-radius: 8px;">
+    <span class="oj-ux-ico-contact-group" 
+          style="font-size: 64px; color: #ccc; display: block; margin-bottom: 20px;"></span>
+    <h3 style="color: #666; margin-bottom: 10px;">No Customers Found</h3>
+    <p style="color: #999; margin-bottom: 20px;">
+      Start by adding your first customer to the system.
+    </p>
+    <oj-button chroming="callToAction" on-oj-action="[[openAddDialog]]">
+      <span slot="startIcon" class="oj-ux-ico-add"></span>
+      Add First Customer
+    </oj-button>
+  </div>
+
+  <!-- Add/Edit Dialog -->
+  <oj-dialog id="customerDialog" 
+             dialog-title="[[isEditing() ? 'Edit Customer' : 'Add New Customer']]"
+             modality="modal"
+             style="width: 500px; max-width: 90vw;">
+    
+    <div slot="body">
+      <oj-form-layout label-edge="start" max-columns="1" style="padding: 20px;">
+        
+        <oj-input-text id="customerName" 
+                       label-hint="Full Name *"
+                       value="{{customerName}}"
+                       placeholder="Enter customer's full name"
+                       required
+                       clear-icon="conditional">
+          <oj-bind-slot name="help">
+            <oj-help-hints definition="Customer's legal name as per official documents"></oj-help-hints>
+          </oj-bind-slot>
+        </oj-input-text>
+
+        <oj-input-text id="customerEmail" 
+                       label-hint="Email Address *"
+                       value="{{customerEmail}}"
+                       placeholder="customer@example.com"
+                       required
+                       clear-icon="conditional">
+          <oj-bind-slot name="validators">
+            <oj-validation-group>
+              <oj-regexp-validator pattern="[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}" 
+                                  message-detail="Please enter a valid email address"></oj-regexp-validator>
+            </oj-validation-group>
+          </oj-bind-slot>
+          <oj-bind-slot name="help">
+            <oj-help-hints definition="Primary email for communications"></oj-help-hints>
+          </oj-bind-slot>
+        </oj-input-text>
+
+        <oj-input-text id="customerMobile" 
+                       label-hint="Mobile Number *"
+                       value="{{customerMobile}}"
+                       placeholder="+1-555-123-4567"
+                       required
+                       clear-icon="conditional">
+          <oj-bind-slot name="help">
+            <oj-help-hints definition="Primary contact number with country code"></oj-help-hints>
+          </oj-bind-slot>
+        </oj-input-text>
+
+        <oj-text-area id="customerAddress" 
+                      label-hint="Address *"
+                      value="{{customerAddress}}"
+                      placeholder="Enter complete address"
+                      rows="4"
+                      max-length="500"
+                      required
+                      resize-behavior="vertical">
+          <oj-bind-slot name="help">
+            <oj-help-hints definition="Complete postal address including city, state, and postal code"></oj-help-hints>
+          </oj-bind-slot>
+        </oj-text-area>
+
+      </oj-form-layout>
+    </div>
+
+    <div slot="footer" style="padding: 15px 20px;">
+      <div class="oj-flex oj-sm-justify-content-flex-end">
+        <oj-button id="cancelBtn" 
+                   chroming="outlined" 
+                   on-oj-action="[[closeDialog]]"
+                   style="margin-right: 10px;">
+          Cancel
+        </oj-button>
+        <oj-button id="saveBtn" 
+                   chroming="callToAction" 
+                   on-oj-action="[[saveCustomer]]"
+                   disabled="[[!isFormValid()]]">
+          <span slot="startIcon" class="oj-ux-ico-save"></span>
+          [[isEditing() ? 'Update Customer' : 'Save Customer']]
+        </oj-button>
+      </div>
+    </div>
+  </oj-dialog>
+</div>
+
+<!-- Custom Styles -->
+<style>
+  .customer-card {
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+  }
+  
+  .customer-card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+  }
+  
+  .customer-info {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+  
+  .customer-avatar {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, #1565C0, #1976D2);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    font-weight: bold;
+    font-size: 16px;
+  }
+  
+  .customer-details h4 {
+    margin: 0;
+    color: #333;
+    font-size: 16px;
+  }
+  
+  .customer-details p {
+    margin: 2px 0 0 0;
+    color: #666;
+    font-size: 13px;
+  }
+  
+  @media (max-width: 768px) {
+    .oj-table .oj-table-cell {
+      padding: 8px 4px;
+      font-size: 14px;
+    }
+    
+    .customer-avatar {
+      width: 32px;
+      height: 32px;
+      font-size: 14px;
+    }
+  }
+</style>
