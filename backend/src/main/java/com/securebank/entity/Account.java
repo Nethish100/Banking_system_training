@@ -56,8 +56,10 @@ public class Account {
 
 // Account Type Enum - Updated as per requirements
 public enum AccountType {
-    SAVING("Saving Account"),
-    CURRENT("Current Account");
+    SAVINGS("Savings Account"),
+    CURRENT("Current Account"),
+    CHECKING("Checking Account"),
+    BUSINESS("Business Account");
 
     private final String displayName;
 
@@ -74,11 +76,15 @@ public enum AccountType {
     public static AccountType fromString(String value) {
         if (value == null) return null;
         switch (value.toUpperCase()) {
-            case "SAVINGS":   // old DB value
-            case "SAVING":    // new value
-                return SAVING;
+            case "SAVINGS":
+            case "SAVING":    // legacy
+                return SAVINGS;
             case "CURRENT":
                 return CURRENT;
+            case "CHECKING":
+                return CHECKING;
+            case "BUSINESS":
+                return BUSINESS;
             default:
                 throw new IllegalArgumentException("Unknown account type: " + value);
         }

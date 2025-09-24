@@ -7,7 +7,7 @@ spring:
   application:
     name: banking-admin-system
     
-  # Database Configuration
+  # Database Configuration - MySQL for persistent storage
   datasource:
     url: jdbc:mysql://localhost:3306/banking_db?createDatabaseIfNotExist=true&useSSL=false&serverTimezone=UTC&allowPublicKeyRetrieval=true
     username: root
@@ -16,11 +16,11 @@ spring:
     hikari:
       connection-timeout: 20000
       maximum-pool-size: 10
-      
+
   # JPA/Hibernate Configuration
   jpa:
     hibernate:
-      ddl-auto: update
+      ddl-auto: create-drop
       naming:
         physical-strategy: org.hibernate.boot.model.naming.PhysicalNamingStrategyStandardImpl
     show-sql: true

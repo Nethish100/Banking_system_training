@@ -57,10 +57,27 @@ public class AccountService {
         return convertToDto(savedAccount);
     }
 
+    public AccountDto updateAccount(String accountNo, AccountDto accountDto) {
+        Account existingAccount = accountRepository.findById(accountNo)
+                .orElseThrow(() -> new RuntimeException("Account not found with number: " + accountNo));
+
+        // Update allowed fields (typically limited for accounts)
+        if (accountDto.getAccountHolderName() != null) {
+            existingAccount.setAccountHolderName(accountDto.getAccountHolderName());
+        }
+        if (accountDto.getAccountBalance() != null) {
+            existingAccount.setAccountBalance(accountDto.getAccountBalance());
+        }
+        // Note: Account type and customer typically cannot be changed after creation
+
+        Account updatedAccount = accountRepository.save(existingAccount);
+        return convertToDto(updatedAccount);
+    }
+
     public void deleteAccount(String accountNo) {
         Account account = accountRepository.findById(accountNo)
                 .orElseThrow(() -> new RuntimeException("Account not found with number: " + accountNo));
-        
+
         accountRepository.delete(account);
     }
 

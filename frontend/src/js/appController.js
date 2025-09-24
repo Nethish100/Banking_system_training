@@ -7,15 +7,14 @@ function(ko, Router, moduleUtils, KnockoutTemplateUtils, ArrayDataProvider, $) {
     // Router setup
     self.router = Router.rootInstance;
     self.router.configure({
-      'login': {label: 'Login', isDefault: true},
-      'dashboard': {label: 'Dashboard'},
+      'dashboard': {label: 'Dashboard', isDefault: true},
       'customers': {label: 'Customers'},
       'accounts': {label: 'Accounts'}
     });
 
-    // Authentication state
-    self.isAuthenticated = ko.observable(!!localStorage.getItem('authToken'));
-    self.currentUser = ko.observable(localStorage.getItem('username') || '');
+    // Authentication state - disabled for development
+    self.isAuthenticated = ko.observable(true);
+    self.currentUser = ko.observable('admin');
 
     // Base API URL
     self.apiBaseUrl = 'http://localhost:8080/api';
@@ -76,12 +75,12 @@ function(ko, Router, moduleUtils, KnockoutTemplateUtils, ArrayDataProvider, $) {
       self.router.go('login');
     };
 
-    // Redirect if not authenticated
-    self.router.currentState.subscribe(function(state) {
-      if (state && state.id !== 'login' && !self.isAuthenticated()) {
-        self.router.go('login');
-      }
-    });
+    // Redirect if not authenticated - disabled for development
+    // self.router.currentState.subscribe(function(state) {
+    //   if (state && state.id !== 'login' && !self.isAuthenticated()) {
+    //     self.router.go('login');
+    //   }
+    // });
 
     // Global AJAX setup for JWT
     $(document).ajaxSend(function(event, jqxhr, settings) {

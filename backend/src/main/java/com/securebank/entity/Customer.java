@@ -49,6 +49,7 @@ public class Customer {
     
     @OneToMany(mappedBy = "customer", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     @JsonManagedReference
+    @com.fasterxml.jackson.annotation.JsonIgnore
     private List<Account> accounts = new ArrayList<>();
     
     // Constructors

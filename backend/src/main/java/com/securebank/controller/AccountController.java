@@ -56,6 +56,23 @@ public class AccountController {
         }
     }
 
+    @PutMapping("/{accountNo}")
+    public ResponseEntity<?> updateAccount(@PathVariable String accountNo, @Valid @RequestBody AccountDto accountDto) {
+        try {
+            // Ensure account number matches path
+            accountDto.setAccountNo(accountNo);
+            // Note: Account updates are limited - typically only balance or holder name can be updated
+            // For this demo, we'll allow updating holder name and balance
+            AccountDto updatedAccount = accountService.updateAccount(accountNo, accountDto);
+            return ResponseEntity.ok(updatedAccount);
+        } catch (RuntimeException e) {
+            return ResponseEntity.notFound().build();
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body("Error updating account: " + e.getMessage());
+        }
+    }
+
     @DeleteMapping("/{accountNo}")
     public ResponseEntity<?> deleteAccount(@PathVariable String accountNo) {
         try {

@@ -79,7 +79,8 @@
   </div>
 
   <!-- Add/Edit Dialog -->
-  <oj-dialog id="customerDialog" 
+  <oj-dialog id="customerDialog"
+             data-bind="ojDialog: {opened: showDialog()}"
              dialog-title="[[isEditing() ? 'Edit Customer' : 'Add New Customer']]"
              modality="modal"
              style="width: 500px; max-width: 90vw;">
@@ -150,10 +151,9 @@
                    style="margin-right: 10px;">
           Cancel
         </oj-button>
-        <oj-button id="saveBtn" 
-                   chroming="callToAction" 
-                   on-oj-action="[[saveCustomer]]"
-                   disabled="[[!isFormValid()]]">
+        <oj-button id="saveBtn"
+                   chroming="callToAction"
+                   on-oj-action="[[saveCustomer]]">
           <span slot="startIcon" class="oj-ux-ico-save"></span>
           [[isEditing() ? 'Update Customer' : 'Save Customer']]
         </oj-button>

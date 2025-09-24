@@ -68,12 +68,16 @@ public class DataInitializer implements CommandLineRunner {
         if (customerRepository.count() == 0) {
             createSampleCustomers();
             System.out.println("✅ Sample customers created");
+        } else {
+            System.out.println("ℹ️ Customers already exist, skipping sample data creation");
         }
 
         // Create sample accounts if not exists
         if (accountRepository.count() == 0) {
             createSampleAccounts();
             System.out.println("✅ Sample accounts created");
+        } else {
+            System.out.println("ℹ️ Accounts already exist, skipping sample data creation");
         }
 
         System.out.println("🎉 Banking System data initialization completed!");
@@ -147,7 +151,7 @@ public class DataInitializer implements CommandLineRunner {
             "ACC000001",
             "John Smith",
             new BigDecimal("15000.00"),
-            Account.AccountType.SAVING,  // Updated: SAVING instead of SAVINGS
+            Account.AccountType.SAVINGS,
             customers.get(0)
         );
 
@@ -171,7 +175,7 @@ public class DataInitializer implements CommandLineRunner {
             "ACC000004",
             "Emily Davis",
             new BigDecimal("12750.50"),
-            Account.AccountType.SAVING,
+            Account.AccountType.SAVINGS,
             customers.get(3)
         );
 
@@ -187,15 +191,15 @@ public class DataInitializer implements CommandLineRunner {
             "ACC000006",
             "John Smith",
             new BigDecimal("3200.00"),
-            Account.AccountType.SAVING,
+            Account.AccountType.SAVINGS,
             customers.get(0)  // John Smith's second account
         );
 
         Account account7 = new Account(
             "ACC000007",
-            "Lisa Anderson", 
+            "Lisa Anderson",
             new BigDecimal("18000.25"),
-            Account.AccountType.SAVING,
+            Account.AccountType.SAVINGS,
             customers.get(5)
         );
 
