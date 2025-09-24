@@ -83,6 +83,9 @@ function(ko, $, app, ArrayDataProvider) {
     };
 
     // Save customer
+    self.shownSaveButton = ko.computed(function() {
+      return true;
+    });
     self.saveCustomer = function() {
       if (!self.isFormValid()) { alert('Please fill all required fields with valid data'); return; }
 

@@ -151,9 +151,11 @@
                    style="margin-right: 10px;">
           Cancel
         </oj-button>
+        <!-- Button is always shown, visually like the "Create Account" button  -->
         <oj-button id="saveBtn"
                    chroming="callToAction"
-                   on-oj-action="[[saveCustomer]]">
+                   on-oj-action="[[saveCustomer]]"
+                   aria-label="Save Customer">
           <span slot="startIcon" class="oj-ux-ico-save"></span>
           [[isEditing() ? 'Update Customer' : 'Save Customer']]
         </oj-button>

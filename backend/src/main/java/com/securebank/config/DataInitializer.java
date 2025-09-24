@@ -16,7 +16,7 @@ import java.time.LocalDateTime;
 
 /**
  * Data Initializer for Banking System
- * Creates sample data as per requirements
+ * Creates sample data ONCE ONLY, and does NOT touch data after that
  */
 @Component
 public class DataInitializer implements CommandLineRunner {
@@ -64,20 +64,15 @@ public class DataInitializer implements CommandLineRunner {
             System.out.println("✅ Manager user created: manager/manager123");
         }
 
-        // Create sample customers if not exists
-        if (customerRepository.count() == 0) {
-            createSampleCustomers();
-            System.out.println("✅ Sample customers created");
-        } else {
-            System.out.println("ℹ️ Customers already exist, skipping sample data creation");
-        }
+        // ONLY initialize demo data if there are NO customers/accounts
+        boolean needSamples = (customerRepository.count() == 0 && accountRepository.count() == 0);
 
-        // Create sample accounts if not exists
-        if (accountRepository.count() == 0) {
+        if (needSamples) {
+            createSampleCustomers();
             createSampleAccounts();
-            System.out.println("✅ Sample accounts created");
+            System.out.println("✅ Sample customers and accounts created");
         } else {
-            System.out.println("ℹ️ Accounts already exist, skipping sample data creation");
+            System.out.println("ℹ️ Persistent data mode: NO RESET. User data will remain across restarts.");
         }
 
         System.out.println("🎉 Banking System data initialization completed!");
@@ -141,12 +136,8 @@ public class DataInitializer implements CommandLineRunner {
     private void createSampleAccounts() {
         // Get all customers
         var customers = customerRepository.findAll();
-        
-        if (customers.isEmpty()) {
-            return;
-        }
+        if (customers.isEmpty()) return;
 
-        // Create accounts for customers - Updated account types as per requirements
         Account account1 = new Account(
             "ACC000001",
             "John Smith",
@@ -154,23 +145,20 @@ public class DataInitializer implements CommandLineRunner {
             Account.AccountType.SAVINGS,
             customers.get(0)
         );
-
         Account account2 = new Account(
             "ACC000002",
             "Sarah Johnson",
             new BigDecimal("8500.00"),
-            Account.AccountType.CURRENT,  // Updated: CURRENT instead of CHECKING
+            Account.AccountType.CURRENT,  
             customers.get(1)
         );
-
         Account account3 = new Account(
             "ACC000003",
             "Michael Brown",
             new BigDecimal("25000.00"),
-            Account.AccountType.CURRENT,  // Updated: CURRENT instead of BUSINESS
+            Account.AccountType.CURRENT,
             customers.get(2)
         );
-
         Account account4 = new Account(
             "ACC000004",
             "Emily Davis",
@@ -178,7 +166,6 @@ public class DataInitializer implements CommandLineRunner {
             Account.AccountType.SAVINGS,
             customers.get(3)
         );
-
         Account account5 = new Account(
             "ACC000005",
             "David Wilson",
@@ -186,15 +173,13 @@ public class DataInitializer implements CommandLineRunner {
             Account.AccountType.CURRENT,
             customers.get(4)
         );
-
         Account account6 = new Account(
             "ACC000006",
             "John Smith",
             new BigDecimal("3200.00"),
             Account.AccountType.SAVINGS,
-            customers.get(0)  // John Smith's second account
+            customers.get(0)
         );
-
         Account account7 = new Account(
             "ACC000007",
             "Lisa Anderson",
@@ -202,15 +187,13 @@ public class DataInitializer implements CommandLineRunner {
             Account.AccountType.SAVINGS,
             customers.get(5)
         );
-
         Account account8 = new Account(
             "ACC000008",
             "Lisa Anderson",
             new BigDecimal("7500.00"),
             Account.AccountType.CURRENT,
-            customers.get(5)  // Lisa Anderson's second account
+            customers.get(5)
         );
-
         accountRepository.save(account1);
         accountRepository.save(account2);
         accountRepository.save(account3);
