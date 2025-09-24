@@ -63,6 +63,38 @@
     </oj-table>
   </div>
 
+  <!-- Search Customer by ID -->
+  <div class="oj-flex oj-sm-align-items-center" style="margin-bottom: 32px;">
+    <div class="oj-flex-item">
+      <oj-input-number id="searchCustomerId"
+                       label-hint="Retrieve Customer By ID"
+                       min="1"
+                       converter='{"type": "number"}'
+                       style="width: 200px; margin-right: 12px;">
+      </oj-input-number>
+      <oj-button id="retrieveCustomerBtn"
+                 chroming="callToAction"
+                 on-oj-action="[[function() {
+                   var id = document.getElementById('searchCustomerId').value;
+                   if (!id) {
+                     alert('Please enter a valid ID');
+                     return;
+                   }
+                   fetch('http://localhost:8080/api/customers/' + id)
+                     .then(function(res) {
+                       if (!res.ok) throw new Error('Not found');
+                       return res.json();
+                     })
+                     .then(function(customer) {
+                       alert('ID: ' + customer.customerId + '\\nName: ' + customer.name + '\\nEmail: ' + customer.email + '\\nMobile: ' + customer.mobileNumber + '\\nAddress: ' + customer.address);
+                     })
+                     .catch(function(err) { alert('Customer not found: ' + err.message); });
+                 }]]">
+        Retrieve Customer
+      </oj-button>
+    </div>
+  </div>
+
   <!-- No Data Message -->
   <div data-bind="visible: !isLoading() && customers().length === 0" 
        style="text-align: center; padding: 60px; background: white; border-radius: 8px;">
@@ -86,61 +118,62 @@
              style="width: 500px; max-width: 90vw;">
     
     <div slot="body">
-      <oj-form-layout label-edge="start" max-columns="1" style="padding: 20px;">
-        
-        <oj-input-text id="customerName" 
-                       label-hint="Full Name *"
-                       value="{{customerName}}"
-                       placeholder="Enter customer's full name"
-                       required
-                       clear-icon="conditional">
-          <oj-bind-slot name="help">
-            <oj-help-hints definition="Customer's legal name as per official documents"></oj-help-hints>
-          </oj-bind-slot>
-        </oj-input-text>
+      <div style="max-height: 50vh; overflow-y: auto;">
+        <oj-form-layout label-edge="start" max-columns="1" style="padding: 20px;">
+          
+          <oj-input-text id="customerName" 
+                         label-hint="Full Name *"
+                         value="{{customerName}}"
+                         placeholder="Enter customer's full name"
+                         required
+                         clear-icon="conditional">
+            <oj-bind-slot name="help">
+              <oj-help-hints definition="Customer's legal name as per official documents"></oj-help-hints>
+            </oj-bind-slot>
+          </oj-input-text>
 
-        <oj-input-text id="customerEmail" 
-                       label-hint="Email Address *"
-                       value="{{customerEmail}}"
-                       placeholder="customer@example.com"
-                       required
-                       clear-icon="conditional">
-          <oj-bind-slot name="validators">
-            <oj-validation-group>
-              <oj-regexp-validator pattern="[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}" 
-                                  message-detail="Please enter a valid email address"></oj-regexp-validator>
-            </oj-validation-group>
-          </oj-bind-slot>
-          <oj-bind-slot name="help">
-            <oj-help-hints definition="Primary email for communications"></oj-help-hints>
-          </oj-bind-slot>
-        </oj-input-text>
+          <oj-input-text id="customerEmail" 
+                         label-hint="Email Address *"
+                         value="{{customerEmail}}"
+                         placeholder="customer@example.com"
+                         required
+                         clear-icon="conditional">
+            <oj-bind-slot name="validators">
+              <oj-validation-group>
+                <oj-regexp-validator pattern="[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}" 
+                                    message-detail="Please enter a valid email address"></oj-regexp-validator>
+              </oj-validation-group>
+            </oj-bind-slot>
+            <oj-bind-slot name="help">
+              <oj-help-hints definition="Primary email for communications"></oj-help-hints>
+            </oj-bind-slot>
+          </oj-input-text>
 
-        <oj-input-text id="customerMobile" 
-                       label-hint="Mobile Number *"
-                       value="{{customerMobile}}"
-                       placeholder="+1-555-123-4567"
-                       required
-                       clear-icon="conditional">
-          <oj-bind-slot name="help">
-            <oj-help-hints definition="Primary contact number with country code"></oj-help-hints>
-          </oj-bind-slot>
-        </oj-input-text>
+          <oj-input-text id="customerMobile" 
+                         label-hint="Mobile Number *"
+                         value="{{customerMobile}}"
+                         placeholder="+1-555-123-4567"
+                         required
+                         clear-icon="conditional">
+            <oj-bind-slot name="help">
+              <oj-help-hints definition="Primary contact number with country code"></oj-help-hints>
+            </oj-bind-slot>
+          </oj-input-text>
 
-        <oj-text-area id="customerAddress" 
-                      label-hint="Address *"
-                      value="{{customerAddress}}"
-                      placeholder="Enter complete address"
-                      rows="4"
-                      max-length="500"
-                      required
-                      resize-behavior="vertical">
-          <oj-bind-slot name="help">
-            <oj-help-hints definition="Complete postal address including city, state, and postal code"></oj-help-hints>
-          </oj-bind-slot>
-        </oj-text-area>
-
-      </oj-form-layout>
+          <oj-text-area id="customerAddress" 
+                        label-hint="Address *"
+                        value="{{customerAddress}}"
+                        placeholder="Enter complete address"
+                        rows="4"
+                        max-length="500"
+                        required
+                        resize-behavior="vertical">
+            <oj-bind-slot name="help">
+              <oj-help-hints definition="Complete postal address including city, state, and postal code"></oj-help-hints>
+            </oj-bind-slot>
+          </oj-text-area>
+        </oj-form-layout>
+      </div>
     </div>
 
     <div slot="footer" style="padding: 15px 20px;">
@@ -151,8 +184,7 @@
                    style="margin-right: 10px;">
           Cancel
         </oj-button>
-        <!-- Button is always shown, visually like the "Create Account" button  -->
-        <oj-button id="saveBtn"
+        <oj-button id="saveCustomerBtn"
                    chroming="callToAction"
                    on-oj-action="[[saveCustomer]]"
                    aria-label="Save Customer">
