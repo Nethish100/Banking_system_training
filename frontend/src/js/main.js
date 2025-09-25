@@ -43,7 +43,7 @@ require(['ojs/ojbootstrap', 'knockout', 'appController', 'ojs/ojlogger', 'ojs/oj
   'ojs/ojmodule', 'ojs/ojrouter', 'ojs/ojnavigationlist', 'ojs/ojbutton', 'ojs/ojtoolbar', 
   'ojs/ojmenu', 'ojs/ojtable', 'ojs/ojarraydataprovider', 'ojs/ojinputtext', 'ojs/ojformlayout',
   'ojs/ojvalidationgroup', 'ojs/ojdialog', 'ojs/ojselectsingle', 'ojs/ojinputnumber', 
-  'ojs/ojinputpassword', 'ojs/ojtextarea', 'ojs/ojprogress-circle', 'ojs/ojmessage-banner'], 
+  'ojs/ojinputpassword', 'ojs/ojtextarea', 'ojs/ojprogress-circle', 'ojs/ojmessage-banner']
 function (Bootstrap, ko, app, Logger) {
   
   Bootstrap.whenDocumentReady().then(function () {

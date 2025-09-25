@@ -1,4 +1,4 @@
-define(['knockout', 'jquery', 'appController', 'ojs/ojarraydataprovider'], 
+define(['knockout', 'jquery', 'appController', 'ojs/ojarraydataprovider'],
 function(ko, $, app, ArrayDataProvider) {
   function CustomersViewModel() {
     var self = this;
@@ -19,6 +19,9 @@ function(ko, $, app, ArrayDataProvider) {
 
     // Dialog state
     self.showDialog = ko.observable(false);
+
+    // Search field (Customer ID)
+    self.searchCustomerId = ko.observable(null);
 
     // Validation
     self.isFormValid = ko.computed(function() {
@@ -62,6 +65,24 @@ function(ko, $, app, ArrayDataProvider) {
       });
     };
 
+    // Retrieve by customer ID (bind search bar)
+    self.retrieveCustomerById = function() {
+      var id = self.searchCustomerId();
+      if (!id) {
+        alert("Please enter a valid ID");
+        return;
+      }
+      $.ajax({
+        url: app.apiBaseUrl + '/customers/' + id,
+        type: 'GET',
+        timeout: 10000,
+        success: function(customer) {
+          alert('ID: ' + customer.customerId + '\nName: ' + customer.name + '\nEmail: ' + customer.email + '\nMobile: ' + customer.mobileNumber + '\nAddress: ' + customer.address);
+        },
+        error: function() { alert('Customer not found'); }
+      });
+    };
+
     // Dialog actions
     self.openAddDialog = function() { self.resetForm(); self.isEditing(false); self.showDialog(true); };
     self.editCustomer = function(customer) {
@@ -83,9 +104,6 @@ function(ko, $, app, ArrayDataProvider) {
     };
 
     // Save customer
-    self.shownSaveButton = ko.computed(function() {
-      return true;
-    });
     self.saveCustomer = function() {
       if (!self.isFormValid()) { alert('Please fill all required fields with valid data'); return; }
 

@@ -525,6 +525,10 @@
                         </div>
                     </div>
 
+                    <div style="margin: 0 0 16px 0; display:flex; align-items:center; gap:8px;">
+                        <input type="number" id="searchCustomerId" class="form-input" placeholder="Enter Customer ID" min="1" style="width:220px">
+                        <button class="btn-primary" onclick="searchCustomerById()" style="width:auto;">Retrieve Customer</button>
+                    </div>
                     <div id="customersTableContainer">
                         <div id="customersLoading" style="text-align: center; padding: 40px;">
                             Loading customers data...
@@ -569,6 +573,10 @@
                         </div>
                     </div>
 
+                    <div style="margin: 0 0 16px 0; display:flex; align-items:center; gap:8px;">
+                        <input type="text" id="searchAccountNo" class="form-input" placeholder="Enter Account No" style="width:220px">
+                        <button class="btn-primary" onclick="searchAccountByNo()" style="width:auto;">Retrieve Account</button>
+                    </div>
                     <div id="accountsTableContainer">
                         <div id="accountsLoading" style="text-align: center; padding: 40px;">
                             Loading accounts data...
@@ -877,6 +885,16 @@
             }
         }
 
+        function searchCustomerById() {
+            const id = parseInt(document.getElementById('searchCustomerId').value, 10);
+            if (!id) { 
+                alert('Please enter a valid Customer ID'); 
+                return; 
+            }
+            // Reuse existing detail fetch/display logic
+            viewCustomer(id);
+        }
+
         function openCustomerModal() {
             editingCustomerId = null;
             document.getElementById('customerModalTitle').textContent = 'ADD New Customer';
@@ -1083,6 +1101,16 @@
                 row.innerHTML = `<td colspan="6" style="text-align: center; padding: 40px; color: #666;">No accounts found. Click "ADD New Account" to get started.</td>`;
                 tbody.appendChild(row);
             }
+        }
+
+        function searchAccountByNo() {
+            const ano = (document.getElementById('searchAccountNo').value || '').trim();
+            if (!ano) { 
+                alert('Please enter a valid Account No'); 
+                return; 
+            }
+            // Reuse existing detail fetch/display logic
+            viewAccount(ano);
         }
 
         function openAccountModal() {

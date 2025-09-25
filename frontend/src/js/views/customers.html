@@ -17,6 +17,22 @@
     </div>
   </div>
 
+  <!-- Search Customer by ID -->
+  <div class="oj-flex oj-sm-align-items-center" style="margin-bottom: 32px;">
+    <oj-input-number id="searchCustomerId"
+                     label-hint="Retrieve Customer By ID"
+                     min="1"
+                     converter='{"type": "number"}'
+                     value="{{searchCustomerId}}"
+                     style="width: 200px; margin-right: 12px;">
+    </oj-input-number>
+    <oj-button id="retrieveCustomerBtn"
+               chroming="callToAction"
+               on-oj-action="[[retrieveCustomerById]]">
+      Retrieve Customer
+    </oj-button>
+  </div>
+
   <!-- Loading Indicator -->
   <div data-bind="visible: isLoading()" style="text-align: center; padding: 40px;">
     <oj-progress-circle size="md"></oj-progress-circle>
@@ -61,38 +77,6 @@
         </div>
       </template>
     </oj-table>
-  </div>
-
-  <!-- Search Customer by ID -->
-  <div class="oj-flex oj-sm-align-items-center" style="margin-bottom: 32px;">
-    <div class="oj-flex-item">
-      <oj-input-number id="searchCustomerId"
-                       label-hint="Retrieve Customer By ID"
-                       min="1"
-                       converter='{"type": "number"}'
-                       style="width: 200px; margin-right: 12px;">
-      </oj-input-number>
-      <oj-button id="retrieveCustomerBtn"
-                 chroming="callToAction"
-                 on-oj-action="[[function() {
-                   var id = document.getElementById('searchCustomerId').value;
-                   if (!id) {
-                     alert('Please enter a valid ID');
-                     return;
-                   }
-                   fetch('http://localhost:8080/api/customers/' + id)
-                     .then(function(res) {
-                       if (!res.ok) throw new Error('Not found');
-                       return res.json();
-                     })
-                     .then(function(customer) {
-                       alert('ID: ' + customer.customerId + '\\nName: ' + customer.name + '\\nEmail: ' + customer.email + '\\nMobile: ' + customer.mobileNumber + '\\nAddress: ' + customer.address);
-                     })
-                     .catch(function(err) { alert('Customer not found: ' + err.message); });
-                 }]]">
-        Retrieve Customer
-      </oj-button>
-    </div>
   </div>
 
   <!-- No Data Message -->

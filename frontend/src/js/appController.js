@@ -82,6 +82,11 @@ function(ko, Router, moduleUtils, KnockoutTemplateUtils, ArrayDataProvider, $) {
     //   }
     // });
 
+    // Redirect to login page if not authenticated
+    if (!self.isAuthenticated()) {
+      window.location.href = "/"; // ensures login is always the entry point
+    }
+
     // Global AJAX setup for JWT
     $(document).ajaxSend(function(event, jqxhr, settings) {
       var token = localStorage.getItem('authToken');

@@ -1,3 +1,4 @@
+
 <div class="oj-hybrid-padding">
   
   <!-- Page Header -->
@@ -15,6 +16,20 @@
         Create Account
       </oj-button>
     </div>
+  </div>
+
+  <!-- Search Account by Account No -->
+  <div class="oj-flex oj-sm-align-items-center" style="margin-bottom: 32px;">
+    <oj-input-text id="searchAccountNo"
+                   label-hint="Retrieve Account By Account No"
+                   value="{{searchAccountNo}}"
+                   style="width: 220px; margin-right: 12px;">
+    </oj-input-text>
+    <oj-button id="retrieveAccountBtn"
+               chroming="callToAction"
+               on-oj-action="[[retrieveAccountByNo]]">
+      Retrieve Account
+    </oj-button>
   </div>
 
   <!-- Account Summary Cards -->
@@ -58,36 +73,6 @@
                     detail="[[errorMessage]]"
                     style="margin-bottom: 20px;">
   </oj-message-banner>
-
-  <!-- Search Account by Account No -->
-  <div class="oj-flex oj-sm-align-items-center" style="margin-bottom: 32px;">
-    <div class="oj-flex-item">
-      <oj-input-text id="searchAccountNo"
-                     label-hint="Retrieve Account By Account No"
-                     style="width: 220px; margin-right: 12px;">
-      </oj-input-text>
-      <oj-button id="retrieveAccountBtn"
-                 chroming="callToAction"
-                 on-oj-action="[[function() {
-                   var ano = document.getElementById('searchAccountNo').value;
-                   if (!ano) {
-                     alert('Please enter a valid Account No');
-                     return;
-                   }
-                   fetch('http://localhost:8080/api/accounts/' + ano)
-                     .then(function(res) {
-                       if (!res.ok) throw new Error('Not found');
-                       return res.json();
-                     })
-                     .then(function(account) {
-                       alert('AccountNo: ' + account.accountNo + '\\nHolder: ' + account.accountHolderName + '\\nType: ' + account.accountType + '\\nBalance: ' + account.accountBalance + '\\nCustomerId: ' + account.customerId);
-                     })
-                     .catch(function(err) { alert('Account not found: ' + err.message); });
-                 }]]">
-        Retrieve Account
-      </oj-button>
-    </div>
-  </div>
 
   <!-- Accounts Table -->
   <div data-bind="visible: !isLoading() && accounts().length > 0">

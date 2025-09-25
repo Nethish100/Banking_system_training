@@ -17,6 +17,9 @@ function(ko, $, app, ArrayDataProvider) {
     self.customerId = ko.observable();
     self.showDialog = ko.observable(false);
 
+    // Search field (Account No)
+    self.searchAccountNo = ko.observable('');
+
     self.accountTypeOptions = [
       {value: 'SAVING', label: 'Savings Account'},
       {value: 'CURRENT', label: 'Current Account'}
@@ -58,6 +61,24 @@ function(ko, $, app, ArrayDataProvider) {
         timeout: 10000,
         success: function(data) { self.customers(data || []); },
         error: function(xhr, status, error) { console.error('Failed to load customers:', error); }
+      });
+    };
+
+    // Retrieve by Account No (bind search bar)
+    self.retrieveAccountByNo = function() {
+      var ano = (self.searchAccountNo() || '').trim();
+      if (!ano) {
+        alert("Please enter a valid Account No");
+        return;
+      }
+      $.ajax({
+        url: app.apiBaseUrl + '/accounts/' + ano,
+        type: 'GET',
+        timeout: 10000,
+        success: function(account) {
+          alert('AccountNo: ' + account.accountNo + '\nHolder: ' + account.accountHolderName + '\nType: ' + account.accountType + '\nBalance: ' + account.accountBalance + '\nCustomerId: ' + account.customerId);
+        },
+        error: function() { alert('Account not found'); }
       });
     };
 
