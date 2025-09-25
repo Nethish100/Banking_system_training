@@ -784,7 +784,7 @@
                 .then(response => response.text())
                 .then(data => {
                     const balance = parseFloat(data);
-                    document.getElementById('totalBalance').textContent = '$' + balance.toLocaleString();
+                    document.getElementById('totalBalance').textContent = '₹' + balance.toLocaleString();
                 })
                 .catch(error => {
                     console.error('Error loading total balance:', error);
@@ -886,11 +886,14 @@
         }
 
         function searchCustomerById() {
-            const id = parseInt(document.getElementById('searchCustomerId').value, 10);
+            const input = document.getElementById('searchCustomerId');
+            const id = parseInt((input.value || '').trim(), 10);
             if (!id) { 
                 alert('Please enter a valid Customer ID'); 
                 return; 
             }
+            // Clear the input after reading
+            input.value = '';
             // Reuse existing detail fetch/display logic
             viewCustomer(id);
         }
@@ -912,11 +915,19 @@
             fetch(API_BASE + '/customers/' + id, {
                 headers: { 'Authorization': 'Bearer ' + token }
             })
-            .then(response => {
-                if (!response.ok) throw new Error('Customer not found');
-                return response.json();
-            })
-            .then(customer => {
+            .then(async response => {
+                if (!response.ok) {
+                    document.getElementById('detailModalTitle').textContent = 'Customer Not Found';
+                    document.getElementById('detailModalBody').innerHTML = `
+                        <div class="form-section">
+                            <h4>Lookup Result</h4>
+                            <p style="margin: 0;">No customer found for ID: <strong>${id}</strong></p>
+                        </div>
+                    `;
+                    document.getElementById('detailModal').style.display = 'block';
+                    return;
+                }
+                const customer = await response.json();
                 document.getElementById('detailModalTitle').textContent = 'Customer Details';
                 document.getElementById('detailModalBody').innerHTML = `
                     <div class="form-section">
@@ -937,7 +948,17 @@
                 `;
                 document.getElementById('detailModal').style.display = 'block';
             })
-            .catch(error => alert('Error loading customer: ' + error.message));
+            .catch(error => {
+                document.getElementById('detailModalTitle').textContent = 'Customer Not Found';
+                document.getElementById('detailModalBody').innerHTML = `
+                    <div class="form-section">
+                        <h4>Lookup Result</h4>
+                        <p style="margin: 0;">No customer found for ID: <strong>${id}</strong></p>
+                        <small style="color:#666;">${error.message || ''}</small>
+                    </div>
+                `;
+                document.getElementById('detailModal').style.display = 'block';
+            });
         }
 
         function editCustomer(id) {
@@ -1104,11 +1125,14 @@
         }
 
         function searchAccountByNo() {
-            const ano = (document.getElementById('searchAccountNo').value || '').trim();
+            const input = document.getElementById('searchAccountNo');
+            const ano = (input.value || '').trim();
             if (!ano) { 
                 alert('Please enter a valid Account No'); 
                 return; 
             }
+            // Clear the input after reading
+            input.value = '';
             // Reuse existing detail fetch/display logic
             viewAccount(ano);
         }
@@ -1163,11 +1187,19 @@
             fetch(API_BASE + '/accounts/' + accountNo, {
                 headers: { 'Authorization': 'Bearer ' + token }
             })
-            .then(response => {
-                if (!response.ok) throw new Error('Account not found');
-                return response.json();
-            })
-            .then(account => {
+            .then(async response => {
+                if (!response.ok) {
+                    document.getElementById('detailModalTitle').textContent = 'Account Not Found';
+                    document.getElementById('detailModalBody').innerHTML = `
+                        <div class="form-section">
+                            <h4>Lookup Result</h4>
+                            <p style="margin: 0;">No account found for Account No: <strong>${accountNo}</strong></p>
+                        </div>
+                    `;
+                    document.getElementById('detailModal').style.display = 'block';
+                    return;
+                }
+                const account = await response.json();
                 document.getElementById('detailModalTitle').textContent = 'Account Details';
                 document.getElementById('detailModalBody').innerHTML = `
                     <div class="form-section">
@@ -1188,7 +1220,17 @@
                 `;
                 document.getElementById('detailModal').style.display = 'block';
             })
-            .catch(error => alert('Error loading account: ' + error.message));
+            .catch(error => {
+                document.getElementById('detailModalTitle').textContent = 'Account Not Found';
+                document.getElementById('detailModalBody').innerHTML = `
+                    <div class="form-section">
+                        <h4>Lookup Result</h4>
+                        <p style="margin: 0;">No account found for Account No: <strong>${accountNo}</strong></p>
+                        <small style="color:#666;">${error.message || ''}</small>
+                    </div>
+                `;
+                document.getElementById('detailModal').style.display = 'block';
+            });
         }
 
         function saveAccount() {
