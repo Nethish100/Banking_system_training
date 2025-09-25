@@ -12,9 +12,9 @@ function(ko, Router, moduleUtils, KnockoutTemplateUtils, ArrayDataProvider, $) {
       'accounts': {label: 'Accounts'}
     });
 
-    // Authentication state - disabled for development
-    self.isAuthenticated = ko.observable(true);
-    self.currentUser = ko.observable('admin');
+    // Authentication state - enabled for full login protection
+    self.isAuthenticated = ko.observable(!!localStorage.getItem('authToken'));
+    self.currentUser = ko.observable(localStorage.getItem('username') || '');
 
     // Base API URL
     self.apiBaseUrl = 'http://localhost:8080/api';
